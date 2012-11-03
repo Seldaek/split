@@ -7,6 +7,12 @@ var Split = function (node) {
     this.nodes = [];
 
     this.addNode(new Node(this, this.matrix, 160, 20));
+
+    window.addEventListener('keydown', function (e) {
+        if (32 === e.keyCode) {
+            that.split();
+        }
+    });
 };
 
 Split.prototype.run = function () {
@@ -40,6 +46,14 @@ Split.prototype.draw = function () {
     this.ctx.clearRect(0, 0, 320, 480);
     for (i = 0, len = this.nodes.length; i < len; i++) {
         this.nodes[i].draw(this.ctx);
+    }
+};
+
+Split.prototype.split = function () {
+    var i, len;
+
+    for (i = 0, len = this.nodes.length; i < len; i++) {
+        this.nodes[i].split();
     }
 };
 

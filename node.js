@@ -1,12 +1,14 @@
-var Node = function (split, matrix, x, y) {
-    this.split = split;
+var Node = function (game, matrix, x, y, angle) {
+    this.game = game;
     this.matrix = matrix;
+
+    this.isSplit = false;
 
     this.x = x;
     this.y = y;
 
     this.speed = 20;
-    this.angle = deg2rad(90);
+    this.angle = deg2rad(angle || 90);
     this.accel = 0;
 };
 
@@ -23,4 +25,11 @@ Node.prototype.draw = function (ctx) {
 
     ctx.fillStyle = 'red';
     ctx.fillRect(coords[0], coords[1], 1, 1);
+};
+
+Node.prototype.split = function () {
+    this.isSplit = true;
+
+    this.game.addNode(new Node(this.game, this.matrix, this.x, this.y, rad2deg(this.angle) + 40));
+    this.game.addNode(new Node(this.game, this.matrix, this.x, this.y, rad2deg(this.angle) - 40));
 };

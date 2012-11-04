@@ -38,14 +38,17 @@ Node.prototype.draw = function (ctx) {
 
     ctx.fillStyle = '#000000';
     ctx.fillRect(coords[0] - 3, coords[1] - 3, 6, 6);
-
-    ctx.fillStyle = 'red';
-    ctx.fillRect(coords[0], coords[1], 1, 1);
+//
+//    ctx.fillStyle = 'red';
+//    ctx.fillRect(coords[0], coords[1], 1, 1);
 };
 
-Node.prototype.split = function () {
+Node.prototype.split = function (strength) {
+    var str1, str2;
     this.isSplit = true;
 
-    this.game.addNode(new Node(this.game, this.matrix, this.x, this.y, rad2deg(this.angle) + 40));
-    this.game.addNode(new Node(this.game, this.matrix, this.x, this.y, rad2deg(this.angle) - 40));
+    str1 = strength - 0.1 + Math.random() * 0.1;
+    str2 = strength - 0.1 + Math.random() * 0.1;
+    this.game.addNode(new Node(this.game, this.matrix, this.x, this.y, rad2deg(this.angle) + str1 * 100, str1 * 120));
+    this.game.addNode(new Node(this.game, this.matrix, this.x, this.y, rad2deg(this.angle) - str2 * 100, str2 * 120));
 };

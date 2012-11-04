@@ -1,18 +1,11 @@
 var Split = function (node) {
-    var that = this;
-
     this.canvas = node;
     this.matrix = new Matrix(20);
     this.ctx = node.getContext('2d');
     this.nodes = [];
 
     this.addNode(new Node(this, this.matrix, 160, 20));
-
-    window.addEventListener('keydown', function (e) {
-        if (32 === e.keyCode) {
-            that.split();
-        }
-    });
+    this.initControls();
 };
 
 Split.prototype.run = function () {
@@ -49,11 +42,38 @@ Split.prototype.draw = function () {
     }
 };
 
-Split.prototype.split = function () {
+Split.prototype.initControls = function () {
+    var isKeyPressed, that = this;
+
+    window.addEventListener('keydown', function (e) {
+        var pressTime;
+        if (isKeyPressed) {
+            return;
+        }
+        if (32 === e.keyCode) {
+            isKeyPressed = true;
+            pressTime = Date.now();
+            e.preventDefault();
+            this.addEventListener('keyup', function listener(e) {
+                if (32 === e.keyCode) {
+                    e.preventDefault();
+                    this.removeEventListener('keyup', listener);
+                    isKeyPressed = false;
+                    that.split(Date.now() - pressTime);
+                }
+            });
+        }
+    });
+};
+
+Split.prototype.split = function (duration) {
     var i, len;
 
+    // normalize, max strength = 2sec press
+    strength = Math.min(1, duration / 1000 / 2);
+
     for (i = 0, len = this.nodes.length; i < len; i++) {
-        this.nodes[i].split();
+        this.nodes[i].split(strength);
     }
 };
 

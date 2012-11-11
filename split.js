@@ -1,16 +1,26 @@
-var Split = function (node) {
+var Split = function (node, trailsNode) {
     this.canvas = node;
+
     this.collisionMap = document.createElement('canvas');
     this.collisionMap.width = node.width;
     this.collisionMap.height = node.height;
     this.collisionCtx = this.collisionMap.getContext('2d');
-    document.body.appendChild(this.collisionMap);
+
     this.matrix = new Matrix(50, node.width, node.height);
+    this.trails = new Trails(trailsNode, this.matrix);
+
     this.ctx = node.getContext('2d');
     this.difficulty = 0.5;
     this.lastBlock = 0;
+    this.frame = 0;
+    this.lastFrame = 0;
     this.nodes = [];
     this.blocks = [];
+
+    this.debug = true;
+    if (this.debug) {
+        document.body.appendChild(this.collisionMap);
+    }
 
     // difficulty progress
     setInterval(function (split) {
@@ -25,10 +35,13 @@ var Split = function (node) {
 
     this.addNode(new Node(this, this.matrix, node.width / 2, 40));
     this.initControls();
+
+    // TODO add http://davidwalsh.name/page-visibility to pause the game
 };
 
 Split.prototype.run = function () {
     this.lastTick = Date.now();
+    this.lastFrame = this.lastTick;
     this.tick();
 };
 
@@ -40,6 +53,12 @@ Split.prototype.tick = function () {
     curTick = Date.now();
     multiplier = (curTick - this.lastTick) / 1000;
     this.lastTick = curTick;
+
+    // compute frames
+    while (curTick > this.lastFrame + 40) {
+        this.frame += 1;
+        this.lastFrame += 40;
+    }
 
     // create blocks
     if (this.lastBlock < curTick - (1 / this.difficulty * 1000) && Math.random() > 0.5) {
@@ -83,11 +102,13 @@ Split.prototype.tick = function () {
 Split.prototype.draw = function () {
     var i, len;
 
+    this.trails.draw(this.frame);
+
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.collisionCtx.fillStyle = '#000000';
     this.collisionCtx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     for (i = 0, len = this.nodes.length; i < len; i++) {
-        this.nodes[i].draw(this.ctx);
+        this.nodes[i].draw(this.ctx, this.trails);
     }
     for (i = 0, len = this.blocks.length; i < len; i++) {
         this.blocks[i].draw(this.ctx, this.collisionCtx);
@@ -95,14 +116,13 @@ Split.prototype.draw = function () {
 };
 
 Split.prototype.computeCollisions = function () {
-    var i, len, coords, offset, node, collMap;
+    var i, len, offset, node, collMap;
 
     collMap = this.collisionCtx.getImageData(0, 0, this.canvas.width, this.canvas.height);
 
     for (i = 0, len = this.nodes.length; i < len; i++) {
         node = this.nodes[i];
-        coords = this.matrix.map(node.x, node.y);
-        offset = (coords[1] * this.canvas.width + coords[0]) * 4;
+        offset = (node.mappedY * this.canvas.width + node.mappedX) * 4;
 
         if (collMap.data[offset]) {
             node.collide();

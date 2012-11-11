@@ -10,8 +10,8 @@ var Block = function (game, matrix, x, y, w, h) {
 
 Block.prototype.tick = function (multiplier) {
     if (!this.matrix.isVisible(this.x, this.y)) {
-        delete this.game;
-        delete this.matrix;
+        this.game = null;
+        this.matrix = null;
 
         return false;
     }

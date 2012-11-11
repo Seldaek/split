@@ -7,19 +7,32 @@
     <style>
         #game {
             border: 1px solid red;
+            position: relative;
+            width: 320px;
+            height: 480px;
+            float: left;
+        }
+        #game canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
         }
     </style>
 </head>
 <body>
-    <canvas id="game" height="480" width="320"></canvas>
+    <section id="game">
+        <canvas id="trails" height="480" width="320"></canvas>
+        <canvas id="base" height="480" width="320"></canvas>
+    </section>
     <script src="split.js"></script>
     <script src="node.js"></script>
     <script src="block.js"></script>
     <script src="matrix.js"></script>
+    <script src="trails.js"></script>
     <script src="utils.js"></script>
     <script>
         (function () {
-            var game = new Split(document.getElementById('game'));
+            var game = new Split(document.getElementById('base'), document.getElementById('trails'));
             game.run();
         })();
     </script>

@@ -17,7 +17,7 @@ var Split = function (node, trailsNode) {
     this.nodes = [];
     this.blocks = [];
 
-    this.debug = true;
+    this.debug = false;
     if (this.debug) {
         document.body.appendChild(this.collisionMap);
     }
@@ -29,6 +29,7 @@ var Split = function (node, trailsNode) {
 
         for (i = 0, len = split.nodes.length; i < len; i++) {
             split.nodes[i].baseSpeed += 1;
+            split.nodes[i].speed += 1;
         }
         split.difficulty += 0.01;
     }, 2000, this);
@@ -104,7 +105,9 @@ Split.prototype.draw = function () {
 
     this.trails.draw(this.frame);
 
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.fillStyle = '#000000';
+    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    //this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.collisionCtx.fillStyle = '#000000';
     this.collisionCtx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     for (i = 0, len = this.nodes.length; i < len; i++) {

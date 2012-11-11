@@ -22,7 +22,7 @@ Block.prototype.tick = function (multiplier) {
 Block.prototype.draw = function (ctx, collCtx) {
     var coords = this.matrix.map(this.x, this.y);
 
-    ctx.fillStyle = '#000000';
+    ctx.fillStyle = '#cccccc';
     ctx.fillRect(coords[0] - this.w / 2, coords[1] - this.h / 2, this.w, this.h);
 
     collCtx.fillStyle = '#FF0000';

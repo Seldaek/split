@@ -28,25 +28,31 @@ Node.prototype.tick = function (multiplier) {
     this.mappedX = coords[0];
     this.mappedY = coords[1];
 
-    // easing of angle/speed
-    if (this.isAlive && this.angle !== this.baseAngle) {
-        this.angle += (this.baseAngle - this.angle) * 0.5 * multiplier;
-        if (Math.abs(this.angle - this.baseAngle) < 0.2) {
-            this.angle = this.baseAngle;
+    if (this.isAlive) {
+        // normalize angle
+        if (this.angle !== this.baseAngle) {
+            this.angle += (this.baseAngle - this.angle) * 0.5 * multiplier;
+            if (Math.abs(this.angle - this.baseAngle) < 0.13) {
+                this.angle = this.baseAngle;
+            }
+
+            // check if we hit the border while we are not running in a straight line
+            if ((this.x > this.matrix.w - 3) || (this.x < 3)) {
+                this.bounce();
+            }
+        } else if (this.mappedY > this.matrix.h - 20) {
+            // speed up nodes if their vector is normalized and they fly too low
+            this.speed = this.baseSpeed * (1.1 + Math.random() * 0.2);
         }
 
-        // check if we hit the border while we are not running in a straight line
-        if ((this.x > this.matrix.w - 3) || (this.x < 3)) {
-            this.bounce();
+        // slow down nodes if they are too high
+        if (this.mappedY < this.matrix.h - 100) {
+            this.speed = this.baseSpeed * (1 - Math.random() * 0.2);
         }
-    }
 
-    if (!this.isAlive || this.isSplit) {
-        // noop
-    } else if (this.speed !== this.baseSpeed) {
-        this.speed += (this.baseSpeed - this.speed) * multiplier;
-        if (Math.abs(this.speed - this.baseSpeed) < 0.2) {
-            this.speed = this.baseSpeed;
+        // decelerate nodes after they spawn
+        if (this.speed > this.baseSpeed * 1.5) {
+            this.speed += (this.baseSpeed - this.speed) * multiplier;
         }
     }
 

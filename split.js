@@ -133,7 +133,7 @@ Split.prototype.computeCollisions = function () {
 
     for (i = 0, len = this.nodes.length; i < len; i++) {
         node = this.nodes[i];
-        offset = (node.mappedY * this.canvas.width + node.mappedX) * 4;
+        offset = (Math.min(this.canvas.height, node.mappedY) * this.canvas.width + Math.max(0, node.mappedX)) * 4;
 
         if (collMap.data[offset]) {
             node.collide();

@@ -16,23 +16,14 @@ var Split = function (node, trailsNode) {
     this.lastFrame = 0;
     this.nodes = [];
     this.blocks = [];
+    this.playing = true;
+    this.paused = false;
+    this.lastDifficultyBump = 0;
 
     this.debug = false;
     if (this.debug) {
         document.body.appendChild(this.collisionMap);
     }
-
-    // difficulty progress
-    setInterval(function (split) {
-        var i, len;
-        split.matrix.speed += 1;
-
-        for (i = 0, len = split.nodes.length; i < len; i++) {
-            split.nodes[i].baseSpeed += 1;
-            split.nodes[i].speed += 1;
-        }
-        split.difficulty += 0.01;
-    }, 2000, this);
 
     this.addNode(new Node(this, this.matrix, node.width / 2, 40));
     this.initControls();
@@ -59,6 +50,17 @@ Split.prototype.tick = function () {
     while (curTick > this.lastFrame + 40) {
         this.frame += 1;
         this.lastFrame += 40;
+    }
+
+    // difficulty progress
+    if (this.lastDifficultyBump > curTick - 2000) {
+        split.matrix.speed += 1;
+
+        for (i = 0, len = split.nodes.length; i < len; i++) {
+            split.nodes[i].baseSpeed += 1;
+            split.nodes[i].speed += 1;
+        }
+        split.difficulty += 0.01;
     }
 
     // create blocks
@@ -97,7 +99,13 @@ Split.prototype.tick = function () {
     // check for collisions
     this.computeCollisions();
 
-    window.requestAnimationFrame(function () { that.tick(); });
+    if (this.nodes.length === 0) {
+        this.playing = false;
+    }
+
+    if (this.playing) {
+        window.requestAnimationFrame(function () { that.tick(); });
+    }
 };
 
 Split.prototype.draw = function () {

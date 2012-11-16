@@ -10,15 +10,18 @@ var Split = function (node, trailsNode) {
     this.trails = new Trails(trailsNode, this.matrix);
 
     this.ctx = node.getContext('2d');
-    this.difficulty = 0.5;
+
+    this.lastTick = 0;
     this.lastBlock = 0;
+    this.lastDifficultyBump = 0;
+
+    this.difficulty = 0.5;
     this.frame = 0;
     this.lastFrame = 0;
     this.nodes = [];
     this.blocks = [];
     this.playing = true;
     this.paused = false;
-    this.lastDifficultyBump = 0;
 
     this.debug = false;
     if (this.debug) {
@@ -31,15 +34,20 @@ var Split = function (node, trailsNode) {
     // TODO add http://davidwalsh.name/page-visibility to pause the game
 };
 
-Split.prototype.run = function () {
+Split.prototype.start = function () {
     this.lastTick = Date.now();
     this.lastFrame = this.lastTick;
+    this.lastDifficultyBump = this.lastTick;
+    this.lastBlock = this.lastTick;
+
     this.tick();
 };
 
 Split.prototype.tick = function () {
     var that, multiplier, curTick, i, len;
     that = this;
+
+    // TODO add pause, unpause should check the time elapsed and add that to all the last* vars
 
     // compute multiplier
     curTick = Date.now();
@@ -54,13 +62,13 @@ Split.prototype.tick = function () {
 
     // difficulty progress
     if (this.lastDifficultyBump > curTick - 2000) {
-        split.matrix.speed += 1;
+        this.matrix.speed += 1;
 
-        for (i = 0, len = split.nodes.length; i < len; i++) {
-            split.nodes[i].baseSpeed += 1;
-            split.nodes[i].speed += 1;
+        for (i = 0, len = this.nodes.length; i < len; i++) {
+            this.nodes[i].baseSpeed += 1;
+            this.nodes[i].speed += 1;
         }
-        split.difficulty += 0.01;
+        this.difficulty += 0.01;
     }
 
     // create blocks

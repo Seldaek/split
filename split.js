@@ -12,6 +12,10 @@ var Split = function (node, trailsNode, energyNode, forceNode, scoreNode, messag
     this.scoreNode = scoreNode;
     this.messagesNode = messagesNode;
 
+    if (window.localStorage && !isNaN(parseInt(window.localStorage.getItem('highscore'), 10))) {
+        this.scoreNode.innerHTML = "Highscore: " + window.localStorage.getItem('highscore');
+    }
+
     this.ctx = node.getContext('2d');
 
     this.debug = false;
@@ -53,10 +57,20 @@ Split.prototype.start = function () {
 };
 
 Split.prototype.gameOver = function () {
+    var msg, highscore, newHighscore = false;
     this.playing = false;
     this.removeControls();
 
-    this.setMessage('Game Over<br />Press To Start', function () {
+    if (window.localStorage) {
+        highscore = parseInt(window.localStorage.getItem('highscore'), 10);
+        if (isNaN(highscore) || highscore < this.score) {
+            window.localStorage.setItem('highscore', this.score);
+            newHighscore = true;
+        }
+    }
+
+    msg = (newHighscore ? 'New Highscore!' : 'Game Over') + '<br />Press To Start';
+    this.setMessage(msg, function () {
         this.start();
     });
 };
@@ -68,7 +82,7 @@ Split.prototype.tick = function () {
     // TODO add pause, unpause should check the time elapsed and add that to all the last* vars
 
     this.score = this.matrix.y - this.canvas.height;
-    this.scoreNode.innerHTML = this.score;
+    this.scoreNode.innerHTML = 'Score: ' + this.score;
 
     // compute multiplier
     curTick = Date.now();

@@ -1,4 +1,4 @@
-var Split = function (node, trailsNode) {
+var Split = function (node, trailsNode, energyNode, forceNode) {
     this.canvas = node;
 
     this.collisionMap = document.createElement('canvas');
@@ -8,6 +8,7 @@ var Split = function (node, trailsNode) {
 
     this.matrix = new Matrix(50, node.width, node.height);
     this.trails = new Trails(trailsNode, this.matrix);
+    this.energyBar = new EnergyBar(this, energyNode, forceNode);
 
     this.ctx = node.getContext('2d');
 
@@ -61,7 +62,8 @@ Split.prototype.tick = function () {
     }
 
     // difficulty progress
-    if (this.lastDifficultyBump > curTick - 2000) {
+    if (this.lastDifficultyBump < curTick - 2000) {
+        this.lastDifficultyBump = curTick;
         this.matrix.speed += 1;
 
         for (i = 0, len = this.nodes.length; i < len; i++) {
@@ -86,8 +88,10 @@ Split.prototype.tick = function () {
 
     // tick all objects
     this.matrix.tick(multiplier);
+    this.energyBar.tick(multiplier);
     for (i = 0, len = this.nodes.length; i < len; i++) {
         if (false === this.nodes[i].tick(multiplier)) {
+            // GC object if it returns false
             this.nodes.splice(this.nodes.indexOf(this.nodes[i]), 1);
             i--;
             len--;
@@ -95,6 +99,7 @@ Split.prototype.tick = function () {
     }
     for (i = 0, len = this.blocks.length; i < len; i++) {
         if (false === this.blocks[i].tick(multiplier)) {
+            // GC object if it returns false
             this.blocks.splice(this.blocks.indexOf(this.blocks[i]), 1);
             i--;
             len--;
@@ -120,6 +125,7 @@ Split.prototype.draw = function () {
     var i, len;
 
     this.trails.draw(this.frame);
+    this.energyBar.draw();
 
     this.ctx.fillStyle = '#000000';
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
@@ -162,25 +168,26 @@ Split.prototype.initControls = function () {
         }
         if (32 === e.keyCode) {
             isKeyPressed = true;
-            pressTime = Date.now();
             e.preventDefault();
+            that.energyBar.start();
             this.addEventListener('keyup', function listener(e) {
                 if (32 === e.keyCode) {
                     e.preventDefault();
                     this.removeEventListener('keyup', listener);
                     isKeyPressed = false;
-                    that.split(Date.now() - pressTime);
+                    that.split(that.energyBar.stop());
                 }
             });
         }
     });
 };
 
-Split.prototype.split = function (duration) {
+Split.prototype.split = function (strength) {
     var i, len;
 
-    // normalize, max strength = 2sec press
-    strength = Math.min(1, duration / 1000 / 2);
+    if (strength === 0) {
+        return;
+    }
 
     for (i = 0, len = this.nodes.length; i < len; i++) {
         this.nodes[i].split(strength);

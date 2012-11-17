@@ -20,22 +20,53 @@
             top: 0;
             left: 0;
         }
+        #energy-bar {
+            right: 5px;
+            top: 5px;
+            height: 100px;
+            width: 10px;
+            background: #000;
+            position: absolute;
+            border: 2px solid #cc0;
+        }
+        #energy, #force {
+            background: #440;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+        }
+        #force {
+            background: #990;
+            height: 0;
+        }
     </style>
 </head>
 <body>
     <section id="game">
         <canvas id="base" height="480" width="320"></canvas>
         <canvas id="trails" height="480" width="320"></canvas>
+        <div id="energy-bar">
+            <div id="energy"></div>
+            <div id="force"></div>
+        </div>
     </section>
     <script src="split.js"></script>
     <script src="node.js"></script>
     <script src="block.js"></script>
     <script src="matrix.js"></script>
     <script src="trails.js"></script>
+    <script src="energybar.js"></script>
     <script src="utils.js"></script>
     <script>
         (function () {
-            var game = new Split(document.getElementById('base'), document.getElementById('trails'));
+            var game = new Split(
+                document.getElementById('base'),
+                document.getElementById('trails'),
+                document.getElementById('energy'),
+                document.getElementById('force')
+            );
             game.start();
         })();
     </script>

@@ -125,8 +125,8 @@ Node.prototype.split = function (strength) {
 
     str1 = strength - 0.1 + Math.random() * 0.1;
     str2 = strength - 0.1 + Math.random() * 0.1;
-    this.game.addNode(new Node(this.game, this.matrix, this.x, this.y, rad2deg(this.angle) + str1 * 100, this.speed + (2 * this.speed * str1)));
-    this.game.addNode(new Node(this.game, this.matrix, this.x, this.y, rad2deg(this.angle) - str2 * 100, this.speed + (2 * this.speed * str2)));
+    this.game.addNode(new Node(this.game, this.matrix, this.x, this.y, rad2deg(this.angle) + str1 * 90, this.speed + (2 * this.speed * str1)));
+    this.game.addNode(new Node(this.game, this.matrix, this.x, this.y, rad2deg(this.angle) - str2 * 90, this.speed + (2 * this.speed * str2)));
 
     this.x = -500;
 };

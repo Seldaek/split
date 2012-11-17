@@ -10,7 +10,7 @@ footer {
     font-size: 10px;
 }
 a, a:link, a:visited, a:hover {
-    color: #674ba9;
+    color: #a998d1;
     text-decoration: none;
 }
 #game {
@@ -38,8 +38,10 @@ a, a:link, a:visited, a:hover {
     position: absolute;
     cursor: pointer;
     text-align: center;
-    text-shadow: 0 0 3px #000, 0 0 3px #000, 0 0 3px #000, 0 0 3px #000;
     width: 100%;
+}
+#messages, #score {
+    text-shadow: 0 0 3px #000, 0 0 3px #000, 0 0 3px #000, 0 0 3px #000;
 }
 #energy-bar {
     right: 5px;

@@ -23,7 +23,7 @@ var Split = function (node, trailsNode, energyNode, forceNode, scoreNode, messag
         document.body.appendChild(this.collisionMap);
     }
 
-    this.setMessage('Press To Start', function () {
+    this.setMessage('Press To Start<br/><br/><br/>You are trapped in a void<br/>[SPACE] is your only way out<br/>Longer presses go further', function () {
         this.start();
     });
 
@@ -195,6 +195,10 @@ Split.prototype.computeCollisions = function () {
 Split.prototype.initControls = function () {
     var isKeyPressed, that = this;
 
+    if (this.controls) {
+        this.removeControls();
+    }
+
     this.controls = function (e) {
         var pressTime;
         if (isKeyPressed) {
@@ -244,13 +248,11 @@ Split.prototype.addBlock = function (block) {
 };
 
 Split.prototype.setMessage = function (message, callback) {
-    var computedStyle, width, height, that = this;
+    var computedStyle, height, that = this;
 
     this.messagesNode.innerHTML = message;
     computedStyle = document.defaultView.getComputedStyle(this.messagesNode, "");
-    width = parseInt(computedStyle.getPropertyValue("width"), 10);
     height = parseInt(computedStyle.getPropertyValue("height"), 10);
-    this.messagesNode.style.marginLeft = '-' + (width / 2) + 'px';
     this.messagesNode.style.marginTop = '-' + (height / 2) + 'px';
 
     if (this.oldCallback) {
@@ -258,8 +260,15 @@ Split.prototype.setMessage = function (message, callback) {
     }
     this.oldCallback = callback;
     if (callback) {
+        this.controls = function (e) {
+            if (32 === e.keyCode) {
+                callback.call(that);
+            }
+        };
+        window.addEventListener('keydown', this.controls);
+
         this.messagesNode.addEventListener('click', function (event) {
-            callback.call(that, event);
+            callback.call(that);
         });
     }
 };

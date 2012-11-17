@@ -14,7 +14,7 @@ EnergyBar.prototype.tick = function (multiplier) {
     var energyMultiplier;
 
     energyMultiplier = multiplier / Math.log(Math.max(2, this.game.nodes.length));
-    this.energy = Math.min(1, this.energy + energyMultiplier * 0.3 * this.game.difficulty);
+    this.energy = Math.min(1, this.energy + energyMultiplier * 0.5 * this.game.difficulty);
     if (this.pressed) {
         this.force = Math.min(this.energy, this.force + multiplier);
     }

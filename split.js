@@ -1,4 +1,4 @@
-var Split = function (node, trailsNode, energyNode, forceNode) {
+var Split = function (node, trailsNode, energyNode, forceNode, scoreNode, messagesNode) {
     this.canvas = node;
 
     this.collisionMap = document.createElement('canvas');
@@ -9,39 +9,56 @@ var Split = function (node, trailsNode, energyNode, forceNode) {
     this.matrix = new Matrix(50, node.width, node.height);
     this.trails = new Trails(trailsNode, this.matrix);
     this.energyBar = new EnergyBar(this, energyNode, forceNode);
+    this.scoreNode = scoreNode;
+    this.messagesNode = messagesNode;
 
     this.ctx = node.getContext('2d');
-
-    this.lastTick = 0;
-    this.lastBlock = 0;
-    this.lastDifficultyBump = 0;
-
-    this.difficulty = 0.5;
-    this.frame = 0;
-    this.lastFrame = 0;
-    this.nodes = [];
-    this.blocks = [];
-    this.playing = true;
-    this.paused = false;
 
     this.debug = false;
     if (this.debug) {
         document.body.appendChild(this.collisionMap);
     }
 
-    this.addNode(new Node(this, this.matrix, node.width / 2, 40));
-    this.initControls();
+    this.setMessage('Press To Start', function () {
+        this.start();
+    });
 
     // TODO add http://davidwalsh.name/page-visibility to pause the game
 };
 
 Split.prototype.start = function () {
+    this.setMessage('');
+
+    this.energyBar.reset();
+    this.matrix.reset();
+    this.trails.reset();
+
     this.lastTick = Date.now();
     this.lastFrame = this.lastTick;
     this.lastDifficultyBump = this.lastTick;
     this.lastBlock = this.lastTick;
 
+    this.difficulty = 0.5;
+    this.frame = 0;
+    this.nodes = [];
+    this.blocks = [];
+    this.playing = true;
+    this.paused = false;
+    this.score = 0;
+
+    this.addNode(new Node(this, this.matrix, this.canvas.width / 2, 40));
+    this.initControls();
+
     this.tick();
+};
+
+Split.prototype.gameOver = function () {
+    this.playing = false;
+    this.removeControls();
+
+    this.setMessage('Game Over<br />Press To Start', function () {
+        this.start();
+    });
 };
 
 Split.prototype.tick = function () {
@@ -49,6 +66,9 @@ Split.prototype.tick = function () {
     that = this;
 
     // TODO add pause, unpause should check the time elapsed and add that to all the last* vars
+
+    this.score = this.matrix.y - this.canvas.height;
+    this.scoreNode.innerHTML = this.score;
 
     // compute multiplier
     curTick = Date.now();
@@ -113,7 +133,7 @@ Split.prototype.tick = function () {
     this.computeCollisions();
 
     if (this.nodes.length === 0) {
-        this.playing = false;
+        this.gameOver();
     }
 
     if (this.playing) {
@@ -161,7 +181,7 @@ Split.prototype.computeCollisions = function () {
 Split.prototype.initControls = function () {
     var isKeyPressed, that = this;
 
-    window.addEventListener('keydown', function (e) {
+    this.controls = function (e) {
         var pressTime;
         if (isKeyPressed) {
             return;
@@ -179,7 +199,14 @@ Split.prototype.initControls = function () {
                 }
             });
         }
-    });
+    };
+
+    window.addEventListener('keydown', this.controls);
+};
+
+Split.prototype.removeControls = function () {
+    window.removeEventListener('keydown', this.controls);
+    this.controls = null;
 };
 
 Split.prototype.split = function (strength) {
@@ -200,6 +227,27 @@ Split.prototype.addNode = function (node) {
 
 Split.prototype.addBlock = function (block) {
     this.blocks.push(block);
+};
+
+Split.prototype.setMessage = function (message, callback) {
+    var computedStyle, width, height, that = this;
+
+    this.messagesNode.innerHTML = message;
+    computedStyle = document.defaultView.getComputedStyle(this.messagesNode, "");
+    width = parseInt(computedStyle.getPropertyValue("width"), 10);
+    height = parseInt(computedStyle.getPropertyValue("height"), 10);
+    this.messagesNode.style.marginLeft = '-' + (width / 2) + 'px';
+    this.messagesNode.style.marginTop = '-' + (height / 2) + 'px';
+
+    if (this.oldCallback) {
+        this.messagesNode.removeEventListener('click', this.oldCallback);
+    }
+    this.oldCallback = callback;
+    if (callback) {
+        this.messagesNode.addEventListener('click', function (event) {
+            callback.call(that, event);
+        });
+    }
 };
 
 if (undefined === window.requestAnimationFrame) {

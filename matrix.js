@@ -1,11 +1,14 @@
 var Matrix = function (speed, w, h) {
-    this.x = 0;
-    this.y = h;
-    this.floatY = this.y;
     this.w = w;
     this.h = h;
+    this.baseSpeed = speed;
+};
 
-    this.speed = speed;
+Matrix.prototype.reset = function () {
+    this.speed = this.baseSpeed;
+    this.x = 0;
+    this.y = this.h;
+    this.floatY = this.y;
 };
 
 Matrix.prototype.setSpeed = function (speed) {

@@ -8,8 +8,6 @@ var Trails = function (node, matrix) {
     this.areaY = this.canvas.height / 2;
     this.areaWidth = this.canvas.width;
     this.areaHeight = this.canvas.height / 2;
-
-    this.processedFrames = 0;
 };
 
 Trails.prototype.draw = function (frame) {
@@ -25,3 +23,7 @@ Trails.prototype.draw = function (frame) {
         this.processedFrames++;
     }
 };
+
+Trails.prototype.reset = function () {
+    this.processedFrames = 0;
+}

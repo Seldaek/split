@@ -2,6 +2,9 @@ var EnergyBar = function (game, energy, force) {
     this.game = game;
     this.energyNode = energy;
     this.forceNode = force;
+};
+
+EnergyBar.prototype.reset = function () {
     this.energy = 0;
     this.force = 0;
     this.pressed = false;

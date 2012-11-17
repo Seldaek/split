@@ -23,7 +23,7 @@ var Split = function (node, trailsNode, energyNode, forceNode, scoreNode, messag
         document.body.appendChild(this.collisionMap);
     }
 
-    this.setMessage('Press To Start<br/><br/><br/>You are trapped in a void<br/>[SPACE] is your only way out<br/>Longer presses go further', function () {
+    this.setMessage('SPLIT<br/><br/><br/>You are trapped in a void.<br/>[SPACE] is your only way out.<br/>Longer presses go further.<br/><br/><br/>Press [SPACE] To Start', function () {
         this.start();
     });
 
@@ -69,7 +69,7 @@ Split.prototype.gameOver = function () {
         }
     }
 
-    msg = (newHighscore ? 'New Highscore!' : 'Game Over') + '<br />Press To Start';
+    msg = (newHighscore ? 'New Highscore!' : 'Game Over') + '<br/><br/><br/>Press [SPACE] To Try Again';
     this.setMessage(msg, function () {
         this.start();
     });

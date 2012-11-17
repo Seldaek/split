@@ -193,7 +193,7 @@ Split.prototype.computeCollisions = function () {
 };
 
 Split.prototype.initControls = function () {
-    var isKeyPressed, that = this;
+    var isActive, that = this;
 
     if (this.controls) {
         this.removeControls();
@@ -201,25 +201,38 @@ Split.prototype.initControls = function () {
 
     this.controls = function (e) {
         var pressTime;
-        if (isKeyPressed) {
+        if (isActive) {
+            if (32 === e.keyCode) {
+                e.preventDefault();
+            }
             return;
         }
+
         if (32 === e.keyCode) {
-            isKeyPressed = true;
+            isActive = true;
             e.preventDefault();
             that.energyBar.start();
             this.addEventListener('keyup', function listener(e) {
                 if (32 === e.keyCode) {
                     e.preventDefault();
                     this.removeEventListener('keyup', listener);
-                    isKeyPressed = false;
+                    isActive = false;
                     that.split(that.energyBar.stop());
                 }
+            });
+        } else if (e.changedTouches) {
+            isActive = true;
+            that.energyBar.start();
+            this.addEventListener('touchend', function listener(e) {
+                this.removeEventListener('touchend', listener);
+                isActive = false;
+                that.split(that.energyBar.stop());
             });
         }
     };
 
     window.addEventListener('keydown', this.controls);
+    window.addEventListener('touchstart', this.controls);
 };
 
 Split.prototype.removeControls = function () {
@@ -260,8 +273,10 @@ Split.prototype.setMessage = function (message, callback) {
     }
     this.oldCallback = callback;
     if (callback) {
-        this.controls = function (e) {
+        this.controls = function listener(e) {
             if (32 === e.keyCode) {
+                e.preventDefault();
+                this.removeEventListener('keydown', listener);
                 callback.call(that);
             }
         };

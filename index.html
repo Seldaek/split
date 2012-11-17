@@ -3,105 +3,10 @@
 <head>
     <title></title>
     <meta charset="utf-8" />
-
-    <style>
-        body {
-            background: #222;
-        }
-        #game {
-            border: 4px solid #566;
-            position: relative;
-            width: 320px;
-            height: 480px;
-            margin: 20px auto;
-            color: #fff;
-            font: 16px Verdana, sans-serif;
-            background: #000;
-        }
-        #game canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-        #score {
-            right: 25px;
-            top: 5px;
-            position: absolute;
-            line-height: 12px;
-        }
-        #messages {
-            left: 0;
-            top: 50%;
-            position: absolute;
-            cursor: pointer;
-            text-align: center;
-            text-shadow: 0 0 3px #000, 0 0 3px #000, 0 0 3px #000, 0 0 3px #000;
-            width: 100%;
-        }
-        #energy-bar {
-            right: 5px;
-            top: 5px;
-            height: 100px;
-            width: 10px;
-            background: #000;
-            position: absolute;
-            border: 1px solid #bbb;
-
-            background-image: linear-gradient(left, rgb(26,26,26) 0%, rgb(124,124,124) 62%, rgb(97,97,97) 94%);
-            background-image: -o-linear-gradient(left, rgb(26,26,26) 0%, rgb(124,124,124) 62%, rgb(97,97,97) 94%);
-            background-image: -moz-linear-gradient(left, rgb(26,26,26) 0%, rgb(124,124,124) 62%, rgb(97,97,97) 94%);
-            background-image: -webkit-linear-gradient(left, rgb(26,26,26) 0%, rgb(124,124,124) 62%, rgb(97,97,97) 94%);
-            background-image: -ms-linear-gradient(left, rgb(26,26,26) 0%, rgb(124,124,124) 62%, rgb(97,97,97) 94%);
-            background-image: -webkit-gradient(
-                linear,
-                left,
-                left,
-                color-stop(0, rgb(26,26,26)),
-                color-stop(0.62, rgb(124,124,124)),
-                color-stop(0.94, rgb(97,97,97))
-            );
-        }
-        #energy, #force {
-            background: #674ba9;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            position: absolute;
-
-            background-image: linear-gradient(left, rgb(12,12,41) 0%, rgb(108,78,171) 62%, rgb(54,48,148) 94%);
-            background-image: -o-linear-gradient(left, rgb(12,12,41) 0%, rgb(108,78,171) 62%, rgb(54,48,148) 94%);
-            background-image: -moz-linear-gradient(left, rgb(12,12,41) 0%, rgb(108,78,171) 62%, rgb(54,48,148) 94%);
-            background-image: -webkit-linear-gradient(left, rgb(12,12,41) 0%, rgb(108,78,171) 62%, rgb(54,48,148) 94%);
-            background-image: -ms-linear-gradient(left, rgb(12,12,41) 0%, rgb(108,78,171) 62%, rgb(54,48,148) 94%);
-            background-image: -webkit-gradient(
-                linear,
-                left,
-                left,
-                color-stop(0, rgb(12,12,41)),
-                color-stop(0.62, rgb(108,78,171)),
-                color-stop(0.94, rgb(54,48,148))
-            );
-        }
-        #force {
-            background: #990;
-            height: 0;
-
-            background-image: linear-gradient(left, rgb(7,7,79) 0%, rgb(75,18,194) 62%, rgb(24,16,180) 94%);
-            background-image: -o-linear-gradient(left, rgb(7,7,79) 0%, rgb(75,18,194) 62%, rgb(24,16,180) 94%);
-            background-image: -moz-linear-gradient(left, rgb(7,7,79) 0%, rgb(75,18,194) 62%, rgb(24,16,180) 94%);
-            background-image: -webkit-linear-gradient(left, rgb(7,7,79) 0%, rgb(75,18,194) 62%, rgb(24,16,180) 94%);
-            background-image: -ms-linear-gradient(left, rgb(7,7,79) 0%, rgb(75,18,194) 62%, rgb(24,16,180) 94%);
-            background-image: -webkit-gradient(
-                linear,
-                left,
-                left,
-                color-stop(0, rgb(7,7,79)),
-                color-stop(0.62, rgb(75,18,194)),
-                color-stop(0.94, rgb(24,16,180))
-            );
-        }
-    </style>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link href="styles.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
     <section id="game">
@@ -114,6 +19,10 @@
         <div id="score"></div>
         <div id="messages"></div>
     </section>
+    <footer>
+        <p>Split, a game designed and created by <a href="http://seld.be">Jordi Boggiano</a> for the GitHub Game Off 2012 contest.</p>
+        <p>Game sources <a href="https://github.com/Seldaek/split">available on GitHub</a>.</p>
+    </footer>
     <script src="split.js"></script>
     <script src="node.js"></script>
     <script src="block.js"></script>

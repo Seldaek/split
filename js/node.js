@@ -42,13 +42,13 @@ Node.prototype.tick = function (multiplier) {
             if ((this.x > this.matrix.w - 3) || (this.x < 3)) {
                 this.bounce();
             }
-        } else if (this.mappedY > this.matrix.h - 20) {
+        } else if (this.mappedY > this.matrix.h - 40) {
             // speed up nodes if their vector is normalized and they fly too low
             this.speed = this.baseSpeed * (1.1 + Math.random() * 0.2);
         }
 
         // slow down nodes if they are too high
-        if (this.mappedY < this.matrix.h - 100) {
+        if (this.mappedY < this.matrix.h - 140) {
             this.speed = this.baseSpeed * (1 - Math.random() * 0.2);
         }
 

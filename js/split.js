@@ -24,6 +24,7 @@ var Split = function (node, trailsNode, energyNode, forceNode, scoreNode, messag
         document.body.appendChild(this.collisionMap);
     }
 
+    this.plays = 1;
     this.setMessage('SPLIT<br/><br/><br/>You are trapped in a void.<br/>[SPACE] is your only way out.<br/>Longer presses go further.<br/><br/><br/>Press [SPACE] To Start', function () {
         this.start();
     });
@@ -56,6 +57,8 @@ Split.prototype.start = function () {
     this.initControls();
 
     this.tick();
+
+    _gaq.push(['_trackEvent', 'Game', 'Play', 'Split', this.plays++]);
 };
 
 Split.prototype.gameOver = function () {

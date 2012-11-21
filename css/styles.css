@@ -1,7 +1,10 @@
+@import url(http://fonts.googleapis.com/css?family=Lato:100,300);
+
 body {
     background: #222;
     color: #fff;
-    font: 16px Verdana, sans-serif;
+    font: 16px 'Lato', sans-serif;
+    font-weight: 300;
 }
 footer {
     text-align: center;
@@ -30,7 +33,7 @@ a, a:link, a:visited, a:hover {
     right: 25px;
     top: 5px;
     position: absolute;
-    line-height: 12px;
+    line-height: 20px;
 }
 #messages {
     left: 0;
@@ -41,7 +44,12 @@ a, a:link, a:visited, a:hover {
     width: 100%;
 }
 #messages, #score {
+    font-weight: 100;
+    font-size: 23px;
     text-shadow: 0 0 3px #000, 0 0 3px #000, 0 0 3px #000, 0 0 3px #000;
+}
+#score, #energy-bar {
+    font-size: 24px;
 }
 #energy-bar {
     right: 5px;

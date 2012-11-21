@@ -13,7 +13,7 @@ var Split = function (node, trailsNode, energyNode, forceNode, scoreNode, messag
     this.messagesNode = messagesNode;
 
     if (window.localStorage && !isNaN(parseInt(window.localStorage.getItem('highscore'), 10))) {
-        this.scoreNode.innerHTML = "Highscore: " + window.localStorage.getItem('highscore');
+        this.scoreNode.innerHTML = "HIGHSCORE " + window.localStorage.getItem('highscore') + " ◊";
     }
 
     this.ctx = node.getContext('2d');
@@ -82,7 +82,7 @@ Split.prototype.tick = function () {
     // TODO add pause, unpause should check the time elapsed and add that to all the last* vars
 
     this.score = this.matrix.y - this.canvas.height;
-    this.scoreNode.innerHTML = 'Score: ' + this.score;
+    this.scoreNode.innerHTML = '' + this.score + ' ◊';
 
     // compute multiplier
     curTick = Date.now();

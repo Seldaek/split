@@ -10,17 +10,20 @@
 </head>
 <body>
     <section id="game">
-        <canvas id="base" height="480" width="320"></canvas>
         <canvas id="trails" height="480" width="320"></canvas>
-        <div id="energy-bar">
-            <div id="energy"></div>
-            <div id="force"></div>
+        <canvas id="base" height="480" width="320"></canvas>
+        <div id="ingame">
+            <div id="strength">STRENGTH</div>
+            <div id="energy-bar">
+                <div id="energy"></div>
+                <div id="force"></div>
+            </div>
         </div>
         <div id="score"></div>
         <div id="messages"></div>
     </section>
     <footer>
-        <p>Split, a game designed and created by <a href="http://seld.be">Jordi Boggiano</a> for the GitHub Game Off 2012 contest.</p>
+        <p>Split, a game conceived and put together by <a href="http://seld.be">Jordi&nbsp;Boggiano</a> for the GitHub&nbsp;Game&nbsp;Off&nbsp;2012. Graphics by <a href="http://meret.com">Meret&nbsp;Vollenweider</a>.</p>
         <p>Game sources <a href="https://github.com/Seldaek/split">available on GitHub</a>.</p>
     </footer>
     <script src="js/split.js"></script>
@@ -38,7 +41,8 @@
                 document.getElementById('energy'),
                 document.getElementById('force'),
                 document.getElementById('score'),
-                document.getElementById('messages')
+                document.getElementById('messages'),
+                document.getElementById('ingame')
             );
         })();
     </script>

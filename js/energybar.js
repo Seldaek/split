@@ -21,8 +21,8 @@ EnergyBar.prototype.tick = function (multiplier) {
 };
 
 EnergyBar.prototype.draw = function () {
-    this.forceNode.style.height = Math.round(this.force * 100).toString() + '%';
-    this.energyNode.style.height = Math.round(this.energy * 100).toString() + '%';
+    this.forceNode.style.width = Math.round(this.force * 100).toString() + '%';
+    this.energyNode.style.width = Math.round(this.energy * 100).toString() + '%';
 };
 
 EnergyBar.prototype.start = function () {

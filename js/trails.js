@@ -16,7 +16,7 @@ Trails.prototype.draw = function (frame) {
     while (this.processedFrames < frame) {
         imageData = this.ctx.getImageData(this.areaX, this.areaY, this.areaWidth, this.areaHeight);
         for (i = 0, len = imageData.data.length; i < len; i += 4) {
-            imageData.data[i+3] *= 0.9;
+            imageData.data[i+3] *= 0.8;
         }
         this.ctx.putImageData(imageData, this.areaX, this.areaY + this.matrix.speed / 25);
 

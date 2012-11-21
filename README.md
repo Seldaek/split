@@ -12,11 +12,13 @@ I set out to imagine a game where your only way of moving is to fork/branch out,
 
 # Tools
 
-No external libs are used for the core of the game. The game is simple enough that it does not require (and also does not really fit) the use of a game engine to render elements or track the game logic. I figured one can handle this with the browser APIs alone these days.
+No external libs are used for the core of the game. The game is simple enough that it does not require (and also does not really fit) the use of a game engine to render elements or track the game logic. I figured one can handle this with the browser APIs alone these days, plus it was a good learning exercise.
 
 # Author
 
 This has been conceived and put together by [Jordi Boggiano](http://seld.be/) ([@seldaek](https://twitter.com/seldaek)).
+
+[Meret Vollenweider](http://meret.com) kindly helped with the game graphics.
 
 # License
 

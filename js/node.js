@@ -17,12 +17,14 @@ var Node = function (game, matrix, x, y, angle, speed) {
     this.accel = 0;
 };
 
+Node.IMAGE = new Image();
+Node.IMAGE.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAATCAYAAACQjC21AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAxBJREFUeNpcVDtvFDEQnrG9G/aOy5ELESSEcAiBAkJ0QEODRIMoaGno6KjS8UfgPyAqGmgoEA0lDWkQUhoCinhccrnblz02440dGU76ZJ/X83m+eeHDjxMIPwwQCVRyHu9YhmNQ2FNydmwAgcDvJSML37LkDIORh2HoQIbhvz+3KiGLHuUBC2HN/nvYG7cBTcAxaSopkhUBfUKRORTIXzsP+ddJRWsLYckTlokySAmjTE/UY6sBCZmvl79vDOb794y1IyILRhu0zv4sF5ffTUer286BRGcjmY2SU6knPBl71d882H1wfrL7FKwZWuugqTU0TctooL+7c1+tX3o+2bj61iHzOUdBMongnYyEVoh8PN+7M97f3XJKDt1CD2zWZ98XAfuMou9FLRVfP2/1fuzcdkJGZd5exmR0ki2KhaVmvrrx+/tjTaIAx3ddDsg2QkmGAlQZYJazU9gvvm4/yqrZshNCBZUyLRXFhDisDq5hXV0hPrb8luOcAPI1lGHlM4ZlDjGfXsWmWgOfuECo/ilozqfVesTBz53kiBOFSkYgjqOHjyeRA8G+aDIDS7aXlB3EOoRYmGzQtK22Dhuhjk74gyc0PstgyHQ3La+tbo2DLs0u7RQXWwg5ME1e7NRkDlxdLSkmQxbR1QN7ZoxhIuK1grIswQj5DZT6lbagSFtJ8rOT4cqXw8XlN6Yqoa4rLpcadMNoG0YJ8/kUZodzoIqxNn7vBqe+da+EslFJP/rKr7lsyr0Lmy/PHP65jNPJLacWuiQYttFaQ8t1aMpDoNHKB3399isrZINETbAnufnkmUgnCsuWOi/q6tTKJyxngv78XG1ms17LHmn2mCz9MufGr83Nuy9cf7DHZBWbzb0zXiXy+JJJ653wrcc4yQVbSGp7ajq5SFqf5cDknIAWs+yHHZ7ecTIruYvKQFYFwlaFgMZZ18RZh9z8JLKaRmf3eSzIcMH5BCMZy2R1uF+FVafjy4agYpJ1w41fs8YsKBDdQ0ffdECb7G2cNi4hikOTwl4lwzVOlXRSR6I4sd1fAQYAlue9+sEeac8AAAAASUVORK5CYII';
+
 Node.prototype.tick = function (multiplier) {
     var coords;
 
     this.x += this.speed * Math.cos(this.angle) * multiplier;
     this.y += this.speed * Math.sin(this.angle) * multiplier;
-//    this.y += this.baseSpeed * multiplier;
 
     coords = this.matrix.map(this.x, this.y);
     this.mappedX = coords[0];
@@ -74,15 +76,11 @@ Node.prototype.bounce = function () {
 };
 
 Node.prototype.draw = function (ctx, trails) {
-    ctx.fillStyle = '#eadc00';
-    ctx.beginPath();
-    ctx.arc(this.mappedX, this.mappedY, 4, 0, Math.PI*2, true);
-    ctx.closePath();
-    ctx.fill();
+    ctx.drawImage(Node.IMAGE, this.mappedX - 11, this.mappedY - 10);
 
-    trails.ctx.fillStyle = '#eadc00';
+    trails.ctx.fillStyle = '#8faec8';
     trails.ctx.beginPath();
-    trails.ctx.arc(this.mappedX, this.mappedY, 3, 0, Math.PI*2, true);
+    trails.ctx.arc(this.mappedX, this.mappedY, 2+Math.random()*2, 0, Math.PI*2, true);
     trails.ctx.closePath();
     trails.ctx.fill();
 };

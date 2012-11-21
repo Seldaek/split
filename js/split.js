@@ -1,4 +1,4 @@
-var Split = function (node, trailsNode, energyNode, forceNode, scoreNode, messagesNode) {
+var Split = function (node, trailsNode, energyNode, forceNode, scoreNode, messagesNode, ingameNode) {
     this.canvas = node;
 
     this.collisionMap = document.createElement('canvas');
@@ -11,6 +11,7 @@ var Split = function (node, trailsNode, energyNode, forceNode, scoreNode, messag
     this.energyBar = new EnergyBar(this, energyNode, forceNode);
     this.scoreNode = scoreNode;
     this.messagesNode = messagesNode;
+    this.ingameNode = ingameNode;
 
     if (window.localStorage && !isNaN(parseInt(window.localStorage.getItem('highscore'), 10))) {
         this.scoreNode.innerHTML = "HIGHSCORE " + window.localStorage.getItem('highscore') + " ◊";
@@ -49,8 +50,9 @@ Split.prototype.start = function () {
     this.playing = true;
     this.paused = false;
     this.score = 0;
+    this.ingameNode.className = 'playing';
 
-    this.addNode(new Node(this, this.matrix, this.canvas.width / 2, 40));
+    this.addNode(new Node(this, this.matrix, this.canvas.width / 2, 80));
     this.initControls();
 
     this.tick();
@@ -59,6 +61,7 @@ Split.prototype.start = function () {
 Split.prototype.gameOver = function () {
     var msg, highscore, newHighscore = false;
     this.playing = false;
+    this.ingameNode.className = '';
     this.removeControls();
 
     if (window.localStorage) {
@@ -115,8 +118,8 @@ Split.prototype.tick = function () {
             this.matrix,
             Math.random() * this.canvas.width,
             20 + this.matrix.y + Math.random() * 20,
-            Math.max(1, this.difficulty * this.canvas.width / 1.5 - 10 + Math.random() * 5),
-            Math.max(1, Math.random() * this.difficulty * 40)
+            Math.max(10, this.difficulty * this.canvas.width / 1.5 - 10 + Math.random() * 5),
+            Math.min(Math.max(3, Math.random() * this.difficulty * 10), 10)
         ));
     }
 
@@ -161,9 +164,7 @@ Split.prototype.draw = function () {
     this.trails.draw(this.frame);
     this.energyBar.draw();
 
-    this.ctx.fillStyle = '#000000';
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-    //this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.collisionCtx.fillStyle = '#000000';
     this.collisionCtx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     for (i = 0, len = this.nodes.length; i < len; i++) {

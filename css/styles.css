@@ -53,7 +53,7 @@ a, a:link, a:visited, a:hover {
     width: 100%;
 }
 #messages, #score, #strength {
-    font-weight: 100;
+    font-weight: 300;
     font-size: 23px;
     text-shadow: 0 0 3px #000, 0 0 3px #000, 0 0 3px #000, 0 0 3px #000;
 }

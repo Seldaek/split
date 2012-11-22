@@ -1,5 +1,10 @@
 var Split = function (node, trailsNode, energyNode, forceNode, scoreNode, messagesNode, ingameNode) {
     this.canvas = node;
+    this.messagesNode = messagesNode;
+
+    if (false === 'getContext' in node) {
+        this.setMessage('This game requires a browser with HTML5 Canvas support. Try to <a href="http://browsehappy.com/">upgrade</a> your browser!');
+    }
 
     this.collisionMap = document.createElement('canvas');
     this.collisionMap.width = node.width;
@@ -10,7 +15,6 @@ var Split = function (node, trailsNode, energyNode, forceNode, scoreNode, messag
     this.trails = new Trails(trailsNode, this.matrix);
     this.energyBar = new EnergyBar(this, energyNode, forceNode);
     this.scoreNode = scoreNode;
-    this.messagesNode = messagesNode;
     this.ingameNode = ingameNode;
 
     if (window.localStorage && !isNaN(parseInt(window.localStorage.getItem('highscore'), 10))) {

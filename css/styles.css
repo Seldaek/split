@@ -17,6 +17,7 @@ a, a:link, a:visited, a:hover {
     text-decoration: none;
 }
 #game {
+    display: block;
     border: 1px solid rgba(0,0,0,.5);
     position: relative;
     width: 320px;

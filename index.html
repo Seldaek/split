@@ -23,7 +23,7 @@
             </div>
         </div>
         <div id="score"></div>
-        <div id="messages"></div>
+        <div id="messages"><noscript>This game really needs JavaScript to run, you should enable it.</noscript></div>
     </section>
     <footer>
         <p>Split, a game conceived and put together by <a href="http://seld.be">Jordi&nbsp;Boggiano</a> for the GitHub&nbsp;Game&nbsp;Off&nbsp;2012. Graphics by <a href="http://meret.com">Meret&nbsp;Vollenweider</a>.</p>
@@ -38,7 +38,7 @@
     <script src="js/utils.js"></script>
     <script>
         var _gaq = _gaq || [];
-        (function () {
+        window.onload = (function () {
             var game = new Split(
                 document.getElementById('base'),
                 document.getElementById('trails'),
@@ -48,7 +48,7 @@
                 document.getElementById('messages'),
                 document.getElementById('ingame')
             );
-        })();
+        });
 
         if (document.location.href.indexOf('http://seld.be/split') === 0) {
             _gaq.push(['_setAccount', 'UA-247313-9']);

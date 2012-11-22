@@ -269,8 +269,8 @@ Split.prototype.setMessage = function (message, callback) {
 
     this.messagesNode.innerHTML = message;
     computedStyle = document.defaultView.getComputedStyle(this.messagesNode, "");
-    height = parseInt(computedStyle.getPropertyValue("height"), 10);
-    this.messagesNode.style.marginTop = '-' + (height / 2) + 'px';
+    height = parseInt(computedStyle.getPropertyValue("height").replace('px', ''), 10);
+    this.messagesNode.setAttribute('style', 'margin-top: -' + Math.round(height / 2) + 'px');
 
     if (this.oldCallback) {
         this.messagesNode.removeEventListener('click', this.oldCallback);

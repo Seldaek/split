@@ -32,8 +32,6 @@ var Split = function (node, trailsNode, energyNode, forceNode, scoreNode, messag
     this.setMessage('SPLIT<br/><br/><br/>You are trapped in a void.<br/>[SPACE] is your only way out.<br/>Longer presses go further.<br/><br/><br/>Press [SPACE] To Start', function () {
         this.start();
     });
-
-    // TODO add http://davidwalsh.name/page-visibility to pause the game
 };
 
 Split.prototype.start = function () {
@@ -47,6 +45,7 @@ Split.prototype.start = function () {
     this.lastFrame = this.lastTick;
     this.lastDifficultyBump = this.lastTick;
     this.lastBlock = this.lastTick;
+    this.lastPause = 0;
 
     this.difficulty = 0.5;
     this.frame = 0;
@@ -59,6 +58,7 @@ Split.prototype.start = function () {
 
     this.addNode(new Node(this, this.matrix, this.canvas.width / 2, 80));
     this.initControls();
+    this.initAutoPause();
 
     this.tick();
 
@@ -89,7 +89,9 @@ Split.prototype.tick = function () {
     var that, multiplier, curTick, i, len;
     that = this;
 
-    // TODO add pause, unpause should check the time elapsed and add that to all the last* vars
+    if (this.paused) {
+        return;
+    }
 
     this.score = this.matrix.y - this.canvas.height;
     this.scoreNode.innerHTML = '' + this.score + ' ◊';
@@ -236,11 +238,57 @@ Split.prototype.initControls = function () {
                 isActive = false;
                 that.split(that.energyBar.stop());
             });
+        } else if (80 === e.keyCode) {
+            that.togglePause();
         }
     };
 
     window.addEventListener('keydown', this.controls);
     window.addEventListener('touchstart', this.controls);
+};
+
+Split.prototype.togglePause = function () {
+    var that = this;
+
+    this.paused = !this.paused;
+    if (this.paused) {
+        this.lastPause = this.lastTick;
+        this.setMessage('[PAUSED]', function () {
+            that.togglePause();
+        });
+    } else {
+        this.lastTick = Date.now();
+        this.lastFrame += (this.lastTick - this.lastPause);
+        this.lastDifficultyBump += (this.lastTick - this.lastPause);
+        this.lastBlock += (this.lastTick - this.lastPause);
+        this.setMessage('');
+
+        window.requestAnimationFrame(function () { that.tick(); });
+    }
+};
+
+Split.prototype.initAutoPause = function () {
+    var state, visibilityChange, that = this;
+    if (typeof document.hidden !== "undefined") {
+      visibilityChange = "visibilitychange";
+      state = "visibilityState";
+    } else if (typeof document.mozHidden !== "undefined") {
+      visibilityChange = "mozvisibilitychange";
+      state = "mozVisibilityState";
+    } else if (typeof document.msHidden !== "undefined") {
+      visibilityChange = "msvisibilitychange";
+      state = "msVisibilityState";
+    } else if (typeof document.webkitHidden !== "undefined") {
+      visibilityChange = "webkitvisibilitychange";
+      state = "webkitVisibilityState";
+    }
+
+    document.addEventListener(visibilityChange, function () {
+        console.log(document[state]);
+        if (document[state].toString().match(/hidden/i) && !that.paused) {
+            that.togglePause();
+        }
+    }, false);
 };
 
 Split.prototype.removeControls = function () {
@@ -276,22 +324,22 @@ Split.prototype.setMessage = function (message, callback) {
     height = parseInt(computedStyle.getPropertyValue("height").replace('px', ''), 10);
     this.messagesNode.setAttribute('style', 'margin-top: -' + Math.round(height / 2) + 'px');
 
-    if (this.oldCallback) {
-        this.messagesNode.removeEventListener('click', this.oldCallback);
-    }
-    this.oldCallback = callback;
-    if (callback) {
-        this.controls = function listener(e) {
-            if (32 === e.keyCode) {
+    this.msgCallback = callback;
+
+    if (!this.msgCbInitialized) {
+        this.msgCbInitialized = true;
+        window.addEventListener('keydown', function listener(e) {
+            if (32 === e.keyCode && that.msgCallback) {
                 e.preventDefault();
-                this.removeEventListener('keydown', listener);
-                callback.call(that);
+                e.stopImmediatePropagation();
+                that.msgCallback();
             }
-        };
-        window.addEventListener('keydown', this.controls);
+        });
 
         this.messagesNode.addEventListener('click', function (event) {
-            callback.call(that);
+            if (that.msgCallback) {
+                that.msgCallback();
+            }
         });
     }
 };

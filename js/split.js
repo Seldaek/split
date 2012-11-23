@@ -18,7 +18,7 @@ var Split = function (node, trailsNode, energyNode, forceNode, scoreNode, messag
     this.ingameNode = ingameNode;
 
     if (window.localStorage && !isNaN(parseInt(window.localStorage.getItem('highscore'), 10))) {
-        this.scoreNode.innerHTML = "HIGHSCORE " + window.localStorage.getItem('highscore') + " ◊";
+        this.scoreNode.innerHTML = "<span>HIGHSCORE</span>" + window.localStorage.getItem('highscore') + " ◊";
     }
 
     this.ctx = node.getContext('2d');

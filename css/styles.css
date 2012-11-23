@@ -1,9 +1,9 @@
-@import url(http://fonts.googleapis.com/css?family=Lato:100,300);
+@import url(http://fonts.googleapis.com/css?family=Lato:300);
 
 body {
     background: #111;
     color: #fff;
-    font: 16px 'Lato', sans-serif;
+    font: 16px 'Helvetica Neue', 'Lato', sans-serif;
     font-weight: 300;
 }
 footer {
@@ -44,6 +44,11 @@ a, a:link, a:visited, a:hover {
     top: 14px;
     position: absolute;
     line-height: 20px;
+    width: 282px;
+    text-align: right;
+}
+#score span {
+    float: left;
 }
 #messages {
     left: 0;

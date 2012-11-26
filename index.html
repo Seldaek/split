@@ -30,6 +30,7 @@
     <footer>
         <p>Split, a game conceived and put together by <a href="http://seld.be">Jordi&nbsp;Boggiano</a> for the GitHub&nbsp;Game&nbsp;Off&nbsp;2012. Graphics by <a href="http://meret.com">Meret&nbsp;Vollenweider</a>.</p>
         <p>Game sources <a href="https://github.com/Seldaek/split">available on GitHub</a>.</p>
+        <p>Audio files used under Creative Commons license by <a href="http://www.jamendo.com/en/artist/3281/kanchi">Kanchi</a>, <a href="http://www.freesound.org/people/Glaneur%20de%20sons/">Glaneur de sons</a> and <a href="http://www.freesound.org/people/bennychico11/">bennychico11</a>.</p>
     </footer>
     <script src="js/split.js"></script>
     <script src="js/node.js"></script>
@@ -38,6 +39,7 @@
     <script src="js/trails.js"></script>
     <script src="js/energybar.js"></script>
     <script src="js/utils.js"></script>
+    <script src="lib/soundmanager/soundmanager2-nodebug-jsmin.js"></script>
     <script>
         var _gaq = _gaq || [];
         window.onload = (function () {
@@ -50,6 +52,17 @@
                 document.getElementById('messages'),
                 document.getElementById('ingame')
             );
+            soundManager.setup({
+                url: 'lib/soundmanager/',
+                flashVersion: 8,
+                preferFlash: false,
+                useHTML5Audio: true,
+                debugMode: false,
+                onready: function() {
+                    game.setSoundManager(soundManager);
+                }
+            });
+            soundManager.audioFormats.mp3.required = false;
         });
 
         if (document.location.href.indexOf('http://seld.be/split') === 0) {

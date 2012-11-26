@@ -39,6 +39,10 @@ EnergyBar.prototype.stop = function () {
         return 0;
     }
 
+    if (this.game.soundManager) {
+        this.game.soundManager.play('discharge');
+    }
+
     this.energy -= force;
 
     return force;

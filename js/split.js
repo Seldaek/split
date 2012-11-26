@@ -48,6 +48,7 @@ Split.prototype.start = function () {
     this.lastPause = 0;
 
     this.difficulty = 0.5;
+    this.failPlays = 0;
     this.frame = 0;
     this.nodes = [];
     this.blocks = [];
@@ -61,6 +62,16 @@ Split.prototype.start = function () {
     this.initAutoPause();
 
     this.tick();
+
+    if (this.soundManager && !this.soundManager.createSound({id:'music'}).playState) {
+        (function loopSound(sound) {
+            sound.play({
+                onfinish: function () {
+                    loopSound(sound);
+                }
+            });
+        })(this.soundManager.createSound({id:'music'}));
+    }
 
     _gaq.push(['_trackEvent', 'Game', 'Play', 'Split', this.plays++]);
 };
@@ -195,6 +206,9 @@ Split.prototype.computeCollisions = function () {
 
         if (collMap.data[offset]) {
             node.collide();
+            if (this.soundManager && !this.soundManager.createSound({id:'fail' + (this.failPlays % 8)}).playState) {
+                this.soundManager.play('fail' + (this.failPlays++ % 8));
+            }
         }
         collMap.data[offset + 1] = 255;
     }
@@ -253,15 +267,21 @@ Split.prototype.togglePause = function () {
     this.paused = !this.paused;
     if (this.paused) {
         this.lastPause = this.lastTick;
-        this.setMessage('[PAUSED]', function () {
+        this.setMessage('[PAUSED]<br/><br/>Press [P] To Resume', function () {
             that.togglePause();
         });
+        if (this.soundManager) {
+            this.soundManager.pauseAll();
+        }
     } else {
         this.lastTick = Date.now();
         this.lastFrame += (this.lastTick - this.lastPause);
         this.lastDifficultyBump += (this.lastTick - this.lastPause);
         this.lastBlock += (this.lastTick - this.lastPause);
         this.setMessage('');
+        if (this.soundManager) {
+            this.soundManager.resumeAll();
+        }
 
         window.requestAnimationFrame(function () { that.tick(); });
     }
@@ -286,6 +306,8 @@ Split.prototype.initAutoPause = function () {
     document.addEventListener(visibilityChange, function () {
         console.log(document[state]);
         if (document[state].toString().match(/hidden/i) && !that.paused) {
+            that.togglePause();
+        } else if (document[state].toString().match(/visible/i) && !that.playing && that.paused) {
             that.togglePause();
         }
     }, false);
@@ -342,6 +364,34 @@ Split.prototype.setMessage = function (message, callback) {
             }
         });
     }
+};
+
+Split.prototype.setSoundManager = function (soundManager) {
+    var i, isIE;
+    this.soundManager = soundManager;
+
+    isIE = /*@cc_on!@*/false;
+
+    for (i = 0; i < 8; i++) {
+        soundManager.createSound({
+            id: 'fail' + i,
+            url: 'audio/electric-wire-02.' + (isIE ? 'mp3' : 'ogg'),
+            volume: 70,
+            autoPlay: false
+        }).load();
+    }
+    soundManager.createSound({
+        id: 'discharge',
+        url: 'audio/laserzips.' + (isIE ? 'mp3' : 'ogg'),
+        volume: 60,
+        autoPlay: false
+    }).load();
+    soundManager.createSound({
+        id: 'music',
+        url: 'audio/Kanchi_-_Black_hole.' + (isIE ? 'mp3' : 'ogg'),
+        volume: 4,
+        autoPlay: false
+    }).load();
 };
 
 if (undefined === window.requestAnimationFrame) {

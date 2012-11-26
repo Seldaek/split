@@ -14,15 +14,17 @@ I set out to imagine a game where your only way of moving is to fork/branch out,
 ![](https://dl.dropbox.com/u/1634226/split/screenshot1.png)
 ![](https://dl.dropbox.com/u/1634226/split/screenshot2.png)
 
-# Tools
+# Projects and media files used
 
 No external libs are used for the core of the game. The game is simple enough that it does not require (and also does not really fit) the use of a game engine to render elements or track the game logic. I figured one can handle this with the browser APIs alone these days, plus it was a good learning exercise.
 
-For audio playback the game uses [SoundManager2](http://www.schillmania.com/projects/soundmanager2/) and the following audio files kindly CC-BY-NC-licensed:
+For audio playback the game uses [SoundManager2](http://www.schillmania.com/projects/soundmanager2/) and the following CC-BY / CC-BY-NC licensed audio files:
 
 - Black Hole ([soundtrack](http://www.jamendo.com/en/track/135925/black-hole))
 - laserzips ([split sound](http://www.freesound.org/people/bennychico11/sounds/125111/))
 - electric-wire-20 ([collision sound](http://www.freesound.org/people/Glaneur%20de%20sons/sounds/34169/))
+
+The music icon is CC-BY licensed from [Dmitry Baranovskiy of The Noun Project](http://thenounproject.com/noun/music/#icon-No5029).
 
 # Author
 

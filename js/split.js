@@ -1,4 +1,4 @@
-var Split = function (node, trailsNode, energyNode, forceNode, scoreNode, messagesNode, ingameNode) {
+var Split = function (node, trailsNode, energyNode, forceNode, scoreNode, messagesNode, ingameNode, audioNode) {
     this.canvas = node;
     this.messagesNode = messagesNode;
 
@@ -16,6 +16,7 @@ var Split = function (node, trailsNode, energyNode, forceNode, scoreNode, messag
     this.energyBar = new EnergyBar(this, energyNode, forceNode);
     this.scoreNode = scoreNode;
     this.ingameNode = ingameNode;
+    this.audioNode = audioNode;
 
     if (window.localStorage && !isNaN(parseInt(window.localStorage.getItem('highscore'), 10))) {
         this.scoreNode.innerHTML = "<span>HIGHSCORE</span>" + window.localStorage.getItem('highscore') + " ◊";
@@ -32,6 +33,8 @@ var Split = function (node, trailsNode, energyNode, forceNode, scoreNode, messag
     this.setMessage('SPLIT<br/><br/><br/>You are trapped in a void.<br/>[SPACE] is your only way out.<br/>Longer presses go further.<br/><br/><br/>Press [SPACE] To Start', function () {
         this.start();
     });
+
+    this.initMuteControls();
 };
 
 Split.prototype.start = function () {
@@ -63,14 +66,8 @@ Split.prototype.start = function () {
 
     this.tick();
 
-    if (this.soundManager && !this.soundManager.createSound({id:'music'}).playState) {
-        (function loopSound(sound) {
-            sound.play({
-                onfinish: function () {
-                    loopSound(sound);
-                }
-            });
-        })(this.soundManager.createSound({id:'music'}));
+    if (this.soundManager) {
+        this.startMusic();
     }
 
     _gaq.push(['_trackEvent', 'Game', 'Play', 'Split', this.plays++]);
@@ -261,6 +258,22 @@ Split.prototype.initControls = function () {
     window.addEventListener('touchstart', this.controls);
 };
 
+Split.prototype.initMuteControls = function () {
+    var that = this;
+
+    this.audioNode.addEventListener('click', function (e) {
+        if (this.className === 'muted') {
+            if (that.soundManager) {
+                this.className = '';
+                that.soundManager.unmute();
+            }
+        } else if (that.soundManager) {
+            this.className = 'muted';
+            that.soundManager.mute();
+        }
+    });
+};
+
 Split.prototype.togglePause = function () {
     var that = this;
 
@@ -392,6 +405,22 @@ Split.prototype.setSoundManager = function (soundManager) {
         volume: 4,
         autoPlay: false
     }).load();
+
+    if (this.playing) {
+        this.startMusic();
+    }
+};
+
+Split.prototype.startMusic = function () {
+    if (!this.soundManager.createSound({id:'music'}).playState) {
+        (function loopSound(sound) {
+            sound.play({
+                onfinish: function () {
+                    loopSound(sound);
+                }
+            });
+        })(this.soundManager.createSound({id:'music'}));
+    }
 };
 
 if (undefined === window.requestAnimationFrame) {

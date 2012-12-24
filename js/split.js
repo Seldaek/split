@@ -19,7 +19,7 @@ var Split = function (node, trailsNode, energyNode, forceNode, scoreNode, messag
     this.audioNode = audioNode;
 
     if (window.localStorage && !isNaN(parseInt(window.localStorage.getItem('highscore'), 10))) {
-        this.scoreNode.innerHTML = "<span>HIGHSCORE</span>" + window.localStorage.getItem('highscore') + " ◊";
+        this.scoreNode.innerHTML = "<span>HIGH SCORE</span>" + window.localStorage.getItem('highscore') + " ◊";
     }
 
     this.ctx = node.getContext('2d');
